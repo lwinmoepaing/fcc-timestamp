@@ -8,16 +8,13 @@ app.use(express.json());
 app.use(express.urlencoded());
 
 const errorReturn = res => res.json({ error: 'Invalid Date' });
+const defaultReturn = res => res.json({ utc: new Date().toUTCString(), unix: new Date().getTime() });
 
 app.get('/api/timestamp/:date_string?', (req, res) => {
 	const { date_string } = req.params;
 	let utc, unix;
 
-	if (!date_string)
-		res.json({
-			utc: new Date().toUTCString(),
-			unix: new Date().getTime()
-		});
+	if (!date_string) defaultReturn(res);
 
 	if (/\d{5,}/.test(date_string)) {
 		unix = +date_string;
