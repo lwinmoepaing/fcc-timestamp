@@ -24,11 +24,8 @@ app.get('/api/timestamp/:date_string?', (req, res) => {
 		unix = new Date(date_string).getTime();
 	}
 
-	if (unix && utc) {
-		res.json({ unix, utc });
-	} else {
-		errorReturn(res);
-	}
+	if (unix && utc) res.json({ unix, utc });
+	errorReturn(res);
 });
 
 app.get('*', (req, res) =>
