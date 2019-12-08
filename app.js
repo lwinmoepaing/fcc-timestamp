@@ -12,7 +12,11 @@ app.get('/api/timestamp/:date_string?', (req, res) => {
 	const { date_string } = req.params;
 	let utc, unix;
 
-	if (!date_string) errorReturn(res);
+	if (!date_string)
+		res.json({
+			utc: new Date().toUTCString(),
+			unix: new Date().getTime()
+		});
 
 	if (/\d{5,}/.test(date_string)) {
 		unix = +date_string;
