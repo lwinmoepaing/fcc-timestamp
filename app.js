@@ -6,7 +6,6 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded());
 
-const dateFormat = { day: 'numeric', year: 'numeric', month: 'long' };
 const errorReturn = res => res.json({ error: 'Invalid Date' });
 
 app.get('/api/timestamp/:date_string?', (req, res) => {
@@ -15,14 +14,12 @@ app.get('/api/timestamp/:date_string?', (req, res) => {
 
 	if (!date_string) errorReturn(res);
 
-	if (isNaN(date_string)) {
-		console.log('isNan');
-		utc = new Date(date_string).toGMTString('en-us');
-		unix = new Date(date_string).getTime();
-	} else {
-		console.log('else');
-		utc = new Date(date_string * 1000).toGMTString('en-us');
+	if (/\d{5,}/.test(date_string)) {
 		unix = +date_string;
+		utc = new Date(unix).toUTCString();
+	} else if (isNaN(date_string)) {
+		utc = new Date(date_string).toUTCString();
+		unix = new Date(date_string).getTime();
 	}
 
 	if (unix && utc) {
